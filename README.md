@@ -10,7 +10,7 @@ Ce projet permet d'ajouter facilement les fonctionnalités d'accessibilité de C
 Pour intégrer le script à votre site, ajoutez simplement la balise suivante dans les pages HTML où vous souhaitez l'activer :
 
 ```html
-<script type="text/javascript" src="https://download.cantoo.fr/cantoo-web-xxx.js"></script>
+<script type="module" src="https://download.cantoo.fr/cantoo-web-xxx.js" defer></script>
 ```
 
 Remplacez `xxx` par le nom de votre projet, qui vous a été communiqué lors de notre collaboration.
