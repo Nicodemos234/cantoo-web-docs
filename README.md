@@ -79,9 +79,7 @@ interface Speech2Text {
 }
 ```
 
----
-
-🔊 text2speech — Synthèse vocale (lecture de texte)
+### 🔊 text2speech — Synthèse vocale (lecture de texte)
 
 ```js
 /**
@@ -143,9 +141,7 @@ interface Text2Speech {
 }
 ```
 
----
-
-🧠 writeTextOnInput — Insertion de texte dicté
+### 🧠 writeTextOnInput — Insertion de texte dicté
 
 ```js
 /**
@@ -157,9 +153,7 @@ interface Text2Speech {
 declare function writeTextOnInput(spokenText: string, inputTarget?: HTMLElement): void;
 ```
 
----
-
-⚙️ openCantooWebConfig — Ouverture de l’interface de configuration
+### ⚙️ openCantooWebConfig — Ouverture de l’interface de configuration
 
 ```js
 /**
@@ -168,9 +162,7 @@ declare function writeTextOnInput(spokenText: string, inputTarget?: HTMLElement)
 declare function openCantooWebConfig(): void;
 ```
 
----
-
-🎨 formatText — Application des préférences d’accessibilité
+### 🎨 formatText — Application des préférences d’accessibilité
 
 ```js
 /**
@@ -182,7 +174,7 @@ declare function openCantooWebConfig(): void;
 declare function formatText(html: string): string;
 ```
 
-🔐 login — Connexion utilisateur
+### 🔐 login — Connexion utilisateur
 
 ```js
 /**
@@ -202,6 +194,8 @@ declare function login(login: string, password: string): Promise<void>;
 declare function logout(): void;
 ```
 
+---
+
 ## 🎯 Désactivation sur certains éléments
 
 ### 🚫 Classe CSS `cantoo-ignore-vocal-recognition` - Désactiver la reconnaissance vocale
@@ -215,8 +209,6 @@ Si vous souhaitez gérer manuellement la dictée vocale dans certains champs de 
 
 Cette classe empêche l’insertion automatique du bouton de dictée vocale dans l’élément ciblé. Vous pouvez ainsi utiliser les fonctions de l’API `window.Cantoo.speech2text` pour implémenter votre propre logique de traitement, et placer le bouton dans votre barre d’outils ou à l’emplacement de votre choix.
 
----
-
 ### 🚫 Classe CSS `cantoo-ignore-hover-events` - Désactiver la barre d'outils au survol
 
 Si vous souhaitez empêcher l’affichage du Tooltip Cantoo lors du survol d’un élément ou de ses enfants, ajoutez la classe CSS `cantoo-ignore-hover-events` à cet élément.
@@ -229,6 +221,8 @@ Si vous souhaitez empêcher l’affichage du Tooltip Cantoo lors du survol d’u
 Cette classe désactive l’apparition du Tooltip Cantoo sur l’élément ciblé ainsi que sur tous ses descendants lors d’un survol avec la souris.
 
 > ℹ️ **Note :** Il reste possible de sélectionner du texte dans ces éléments pour l’adapter, même si le Tooltip n’apparaît pas au survol.
+
+---
 
 ## ❓ Assistance
 
