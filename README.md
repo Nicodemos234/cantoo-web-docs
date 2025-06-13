@@ -202,11 +202,11 @@ declare function login(login: string, password: string): Promise<void>;
 declare function logout(): void;
 ```
 
-## 🎯 Personnalisation de la reconnaissance vocale
+## 🎯 Désactivation sur certains éléments
 
-### 🚫 Classe CSS `cantoo-ignore-vocal-recognition`
+### 🚫 Classe CSS `cantoo-ignore-vocal-recognition` - Désactiver la reconnaissance vocale
 
-Si vous souhaitez gérer manuellement l'insertion du texte reconnu par la dictée vocale dans certains champs de saisie, vous pouvez utiliser la classe CSS `cantoo-ignore-vocal-recognition`.
+Si vous souhaitez gérer manuellement la dictée vocale dans certains champs de saisie, vous pouvez utiliser la classe CSS `cantoo-ignore-vocal-recognition`. Vous pourrez alors créer votre propre bouton pour déclencher et arrêter la reconnaissance vocale et l'ajouter à votre propre barre d'outils
 
 ```html
 <!-- Cet input n'aura pas le bouton de dictée vocale inséré automatiquement -->
@@ -217,7 +217,7 @@ Cette classe empêche l’insertion automatique du bouton de dictée vocale dans
 
 ---
 
-### 🚫 Classe CSS `cantoo-ignore-hover-events`
+### 🚫 Classe CSS `cantoo-ignore-hover-events` - Désactiver la barre d'outils au survol
 
 Si vous souhaitez empêcher l’affichage du Tooltip Cantoo lors du survol d’un élément ou de ses enfants, ajoutez la classe CSS `cantoo-ignore-hover-events` à cet élément.
 
