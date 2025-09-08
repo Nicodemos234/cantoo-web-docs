@@ -39,6 +39,8 @@ declare const Cantoo: {
   formatText: (html: string) => string;
   login: (login: string, password: string) => Promise<void>;
   logout: () => void;
+  activate: () => void;
+  deactivate: () => void;
 };
 ```
 
@@ -194,6 +196,24 @@ declare function login(login: string, password: string): Promise<void>;
 declare function logout(): void;
 ```
 
+### 🟢 activate — Activer Cantoo Web
+
+```js
+/**
+ * Active toutes les fonctionnalités de Cantoo Web sur la page.
+ */
+declare function activate(): void;
+```
+
+### 🔴 deactivate — Désactiver Cantoo Web
+
+```js
+/**
+ * Désactive toutes les fonctionnalités de Cantoo Web sur la page.
+ */
+declare function deactivate(): void;
+```
+
 ---
 
 ## 🎯 Désactivation sur certains éléments
@@ -221,6 +241,17 @@ Si vous souhaitez empêcher l’affichage du Tooltip Cantoo lors du survol d’u
 Cette classe désactive l’apparition du Tooltip Cantoo sur l’élément ciblé ainsi que sur tous ses descendants lors d’un survol avec la souris.
 
 > ℹ️ **Note :** Il reste possible de sélectionner du texte dans ces éléments pour l’adapter, même si le Tooltip n’apparaît pas au survol.
+
+### 🚫 Classe CSS `cantoo-ignore-all` - Désactiver complètement Cantoo Web sur un élément
+
+Si vous souhaitez empêcher toute interaction Cantoo Web (barre d'outils au survol et barre d'outils lors de la sélection) sur un élément, ajoutez la classe CSS `cantoo-ignore-all` à cet élément.
+
+```html
+<!-- Cantoo Web sera totalement désactivé sur cet élément -->
+<div class="cantoo-ignore-all">...</div>
+```
+
+Cette classe désactive à la fois l’apparition du Tooltip Cantoo au survol et l’apparition de la barre d'outils lors de la sélection sur l’élément ciblé et ses descendants.
 
 ---
 
