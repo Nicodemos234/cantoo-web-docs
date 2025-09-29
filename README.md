@@ -41,7 +41,88 @@ declare const Cantoo: {
   logout: () => void;
   activate: () => void;
   deactivate: () => void;
+  load: (params: CantooWebData) => void;
+  addParameterChangeListener: (listener: (params: CantooWebData) => void) => void;
+  removeParameterChangeListener: (listener: (params: CantooWebData) => void) => void;
 };
+
+/**
+ * Types de données pour la dictée vocale.
+ */
+type VocalDictationData = {
+  lang?: string;
+};
+
+/**
+ * Types de données pour la lecture vocale.
+ */
+type VocalReadingData = {
+  lang?: string;
+  voice?: string;
+  rate?: number;
+  delay?: number;
+};
+
+/**
+ * Types de données pour les options de plugin.
+ */
+type PluginOptionsData = {
+  textExtractionOnModal?: boolean;
+  activeOptions?: Array<'vocalRecognition' | 'vocalSynthesis' | 'textCustomization' | 'translator' | 'dictionary' | 'visualAssistance' | 'floatingBar'>;
+  language?: string;
+};
+
+/**
+ * Interface définissant la structure des données de configuration Cantoo Web.
+ * Cette interface est un enregistrement (Record) avec des clés spécifiques.
+ */
+interface CantooWebData {
+  'vocal-dictation': VocalDictationData;
+  'vocal-reading': VocalReadingData;
+  'accessibility-options': AccessibilityOptions;
+  'plugin-options': PluginOptionsData;
+}
+
+/**
+ * Options d'accessibilité.
+ */
+interface AccessibilityOptions {
+  wordSpacing?: number;
+  syllableSpacing?: number;
+  lineSpacing?: number;
+  letterSpacing?: number;
+  fontSize?: number;
+  fontFamily?: string;
+
+  syllableSeparator?: '|' | '-' | '/' | '+' | '·';
+  colorByMode?: 'word' | 'syllable' | 'sound';
+  colorSet?: string[];
+  soundsColors?: { [sound: string]: string };
+  soundsBackgroundColors?: Record<string, string>;
+  specialStrategy?: {
+    type?: 'bionic' | 'bounds' | 'sounds' | 'silent';
+    bold?: boolean;
+    color?: string;
+  };
+
+  vocalSynthesis?: boolean;
+  vocalSynthesisSpeed?: number;
+  vocalSynthesisFeedbackDelay?: number;
+  vocalSynthesisKeyboardFeedback?: boolean;
+  vocalSynthesisButtonFeedback?: boolean;
+  vocalSynthesisLabelFeedback?: boolean;
+  vocalSynthesisWritingFeedback?: boolean;
+
+  magnifier?: boolean;
+  magnifierZoom?: number;
+  dictionary?: boolean;
+  translator?: boolean;
+  contrastMode?: 'highContrast' | 'darkMode';
+  invertImages?: boolean;
+  readBand?: boolean;
+  bandWidth?: number;
+  bandOpacity?: number;
+}
 ```
 
 ### 🗣️ speech2text — Reconnaissance vocale (dictée)
@@ -212,6 +293,43 @@ declare function activate(): void;
  * Désactive toutes les fonctionnalités de Cantoo Web sur la page.
  */
 declare function deactivate(): void;
+```
+
+### 📥 load — Charger les paramètres de configuration
+
+```js
+/**
+ * Charge les paramètres de configuration de Cantoo Web.
+ *
+ * @param params - Les paramètres de configuration à charger.
+ */
+declare function load(params: CantooWebData): void;
+```
+
+### 👂 addParameterChangeListener — Ajouter un écouteur de changement de paramètres
+
+```js
+/**
+ * Ajoute un écouteur pour les changements de paramètres de configuration.
+ *
+ * @param listener - Fonction appelée lors des changements de paramètres.
+ */
+declare function addParameterChangeListener(
+  listener: (params: CantooWebData) => void
+): void;
+```
+
+### 🗑️ removeParameterChangeListener — Supprimer un écouteur de changement de paramètres
+
+```js
+/**
+ * Supprime un écouteur de changement de paramètres précédemment ajouté.
+ *
+ * @param listener - L'écouteur à supprimer.
+ */
+declare function removeParameterChangeListener(
+  listener: (params: CantooWebData) => void
+): void;
 ```
 
 ---
