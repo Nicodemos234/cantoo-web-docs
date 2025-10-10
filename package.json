@@ -1,0 +1,14 @@
+{
+  "name": "@cantoo/cantoo-web",
+  "version": "1.0.1",
+  "description": "Typed loader and global definitions for Cantoo web",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && cp src/types.d.ts dist/types.d.ts"
+  },
+  "license": "MIT"
+}
