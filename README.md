@@ -17,6 +17,90 @@ Remplacez `xxx` par le nom de votre projet, qui vous a été communiqué lors de
 
 ---
 
+## 📦 Installation via npm
+
+Si vous utilisez un environnement Node.js ou un bundler moderne (Webpack, Vite, etc.), vous pouvez installer la bibliothèque via npm :
+
+```bash
+npm install @cantoo/cantoo-web
+```
+
+ou avec yarn :
+
+```bash
+yarn add @cantoo/cantoo-web
+```
+
+### Utilisation de la fonction `loadCantoo`
+
+La bibliothèque npm expose une fonction `loadCantoo` qui charge dynamiquement le script Cantoo Web et retourne une promesse avec l'objet global `Cantoo` :
+
+```typescript
+import { loadCantoo } from "@cantoo/cantoo-web";
+
+// Charger le script Cantoo Web
+loadCantoo("https://download.cantoo.fr/cantoo-web-xxx.js")
+  .then((Cantoo) => {
+    console.log("Cantoo Web chargé avec succès");
+
+    // Ou charger des paramètres personnalisés
+    Cantoo.load({
+      "vocal-dictation": {
+        lang: "fr-FR",
+      },
+      "vocal-reading": {
+        lang: "fr-FR",
+        rate: 1.0,
+      },
+      "accessibility-options": {
+        fontSize: 16,
+        lineSpacing: 1.5,
+      },
+      "plugin-options": {
+        language: "fr",
+        activeOptions: [
+          "vocalRecognition",
+          "vocalSynthesis",
+          "textCustomization",
+        ],
+      },
+    });
+  })
+  .catch((error) => {
+    console.error("Erreur lors du chargement de Cantoo Web:", error);
+  });
+```
+
+### Support TypeScript
+
+La bibliothèque inclut des définitions TypeScript complètes pour l'API Cantoo Web. Vous bénéficiez ainsi de l'autocomplétion et de la vérification de types dans votre IDE :
+
+```typescript
+import {
+  loadCantoo,
+  type Cantoo,
+  type CantooWebData,
+} from "@cantoo/cantoo-web";
+
+// Types disponibles pour l'objet Cantoo et ses paramètres
+const params: CantooWebData = {
+  "vocal-dictation": { lang: "fr-FR" },
+  "vocal-reading": { lang: "fr-FR", rate: 1.0 },
+  "accessibility-options": {},
+  "plugin-options": {},
+};
+
+loadCantoo("https://download.cantoo.fr/cantoo-web-xxx.js").then(
+  (cantoo: Cantoo) => {
+    cantoo.load(params);
+  }
+);
+```
+
+> **Note :** Remplacez `xxx` par le nom de votre projet dans l'URL du script.
+
+---
+
 ## 🔄 Mises à jour
 
 Les mises à jour du script sont automatiques. Aucune action n'est nécessaire de votre part pour bénéficier des dernières fonctionnalités et corrections.
@@ -44,6 +128,8 @@ declare const Cantoo: {
   load: (params: CantooWebData) => void;
   addParameterChangeListener: (listener: (params: CantooWebData) => void) => void;
   removeParameterChangeListener: (listener: (params: CantooWebData) => void) => void;
+  addUsageEventListener: (listener: (event: UsageEvent) => void) => void;
+  removeUsageEventListener: (listener: (event: UsageEvent) => void) => void;
 };
 
 /**
@@ -329,6 +415,52 @@ declare function addParameterChangeListener(
  */
 declare function removeParameterChangeListener(
   listener: (params: CantooWebData) => void
+): void;
+```
+
+### 📊 addUsageEventListener — Ajouter un écouteur d'événements d'utilisation
+
+```js
+/**
+ * Type d'événement d'utilisation de Cantoo Web.
+ */
+type UsageEvent =
+  | "CANTOO_READ_TEXT"
+  | "CANTOO_ADAPT_TEXT"
+  | "CANTOO_DICTATE_TEXT"
+  | "CANTOO_TRANSLATED_TEXT"
+  | "CANTOO_DEFINED_TEXT";
+
+/**
+ * Ajoute un écouteur pour les événements d'utilisation de Cantoo Web.
+ * Permet de suivre les actions effectuées par les utilisateurs.
+ *
+ * @param listener - Fonction appelée lors des événements d'utilisation.
+ */
+declare function addUsageEventListener(
+  listener: (event: UsageEvent) => void
+): void;
+```
+
+**Exemple d'utilisation :**
+
+```typescript
+Cantoo.addUsageEventListener((event) => {
+  console.log("Événement d'utilisation:", event);
+  // Exemple: "CANTOO_READ_TEXT" lorsqu'un utilisateur utilise la synthèse vocale
+});
+```
+
+### 🗑️ removeUsageEventListener — Supprimer un écouteur d'événements d'utilisation
+
+```js
+/**
+ * Supprime un écouteur d'événements d'utilisation précédemment ajouté.
+ *
+ * @param listener - L'écouteur à supprimer.
+ */
+declare function removeUsageEventListener(
+  listener: (event: UsageEvent) => void
 ): void;
 ```
 
