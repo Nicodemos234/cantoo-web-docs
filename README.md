@@ -109,7 +109,7 @@ Les mises à jour du script sont automatiques. Aucune action n'est nécessaire d
 
 ## 🌐 Options : Élément global Cantoo
 
-Une fois intégré, vous bénéficiez déjà de l'adaptation offerte par Cantoo Web et vous n'avez **rien à faire**. Toutefois, si vous souhaitez un niveau d'intégration plus fin, ou mettre à profit les fonctionnalités de Cantoo Web pour améliorer votre produit, le script expose un objet global nommé Cantoo contenant plusieurs fonctionnalités clés, permettant de contrôler les fonctionnalités de l'outil :
+Une fois intégré, vous bénéficiez déjà de l'adaptation offerte par Cantoo Web et vous n'avez **rien à faire**. Toutefois, si vous souhaitez un niveau d'intégration plus fin, ou mettre à profit les fonctionnalités de Cantoo Web pour améliorer votre produit, le script expose un objet global accessible via window.Cantoo contenant plusieurs fonctionnalités clés, permettant de contrôler les fonctionnalités de l'outil :
 
 ```js
 /**
