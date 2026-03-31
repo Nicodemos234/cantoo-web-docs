@@ -77,6 +77,7 @@ export type PluginOptionsData = {
     | "dictionary"
     | "visualAssistance"
     | "floatingBar"
+    | "readMode"
   >;
   language?: string;
 };
@@ -132,6 +133,18 @@ export interface CantooWebData {
   "accessibility-options": AccessibilityOptions;
   "plugin-options": PluginOptionsData;
 }
+
+/**
+ * Paramètres acceptés par {@link Cantoo.setConfig}.
+ * Mise à jour partielle : chaque section fournie est fusionnée avec la configuration en cours
+ * (fusion superficielle des objets par section).
+ *
+ * Peut être un objet partiel ou une fonction recevant la configuration courante et retournant
+ * les sections à modifier (comme un `setState` React).
+ */
+export type SetConfigParams =
+  | Partial<CantooWebData>
+  | ((current: CantooWebData) => Partial<CantooWebData>);
 
 /**
  * Gestion de la synthèse vocale (text-to-speech).
@@ -205,6 +218,14 @@ export interface Cantoo {
   activate: () => void;
   deactivate: () => void;
   load: (params: CantooWebData) => void;
+  /**
+   * Met à jour partiellement la configuration utilisateur sans remplacer tout le profil.
+   * Contrairement à {@link Cantoo.load}, les sections omises sont conservées ; pour chaque section
+   * présente, les champs fournis sont fusionnés avec les valeurs déjà en cache.
+   *
+   * @param params - Sous-ensemble de {@link SetConfigParams} à appliquer.
+   */
+  setConfig: (params: SetConfigParams) => void;
   addParameterChangeListener: (
     listener: (params: CantooWebData) => void
   ) => void;

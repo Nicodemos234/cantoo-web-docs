@@ -3,6 +3,7 @@ export type {
   Cantoo,
   Text2Speech,
   CantooWebData,
+  SetConfigParams,
   AccessibilityOptions,
   PluginOptionsData,
   VocalDictationData,

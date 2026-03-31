@@ -1,4 +1,5 @@
 # cantoo-web-docs
+
 Documentation for Cantoo Web
 
 # Intégration du script Cantoo Web
@@ -10,7 +11,11 @@ Ce projet permet d'ajouter facilement les fonctionnalités d'accessibilité de C
 Pour intégrer le script à votre site, ajoutez simplement la balise suivante dans les pages HTML où vous souhaitez l'activer :
 
 ```html
-<script type="module" src="https://download.cantoo.fr/cantoo-web-xxx.js" defer></script>
+<script
+  type="module"
+  src="https://download.cantoo.fr/cantoo-web-xxx.js"
+  defer
+></script>
 ```
 
 Remplacez `xxx` par le nom de votre projet, qui vous a été communiqué lors de notre collaboration.
@@ -80,6 +85,7 @@ import {
   loadCantoo,
   type Cantoo,
   type CantooWebData,
+  type SetConfigParams,
 } from "@cantoo/cantoo-web";
 
 // Types disponibles pour l'objet Cantoo et ses paramètres
@@ -93,7 +99,9 @@ const params: CantooWebData = {
 loadCantoo("https://download.cantoo.fr/cantoo-web-xxx.js").then(
   (cantoo: Cantoo) => {
     cantoo.load(params);
-  }
+    const tweaks: SetConfigParams = { "plugin-options": { language: "fr" } };
+    cantoo.setConfig(tweaks);
+  },
 );
 ```
 
@@ -126,6 +134,7 @@ declare const Cantoo: {
   activate: () => void;
   deactivate: () => void;
   load: (params: CantooWebData) => void;
+  setConfig: (params: SetConfigParams) => void;
   addParameterChangeListener: (listener: (params: CantooWebData) => void) => void;
   removeParameterChangeListener: (listener: (params: CantooWebData) => void) => void;
   addUsageEventListener: (listener: (event: UsageEvent) => void) => void;
@@ -154,7 +163,7 @@ type VocalReadingData = {
  */
 type PluginOptionsData = {
   textExtractionOnModal?: boolean;
-  activeOptions?: Array<'vocalRecognition' | 'vocalSynthesis' | 'textCustomization' | 'translator' | 'dictionary' | 'visualAssistance' | 'floatingBar'>;
+  activeOptions?: Array<'vocalRecognition' | 'vocalSynthesis' | 'textCustomization' | 'translator' | 'dictionary' | 'visualAssistance' | 'floatingBar' | 'readMode'>;
   language?: string;
 };
 
@@ -168,6 +177,11 @@ interface CantooWebData {
   'accessibility-options': AccessibilityOptions;
   'plugin-options': PluginOptionsData;
 }
+
+/** Mise à jour partielle — objet ou fonction recevant la config courante. */
+type SetConfigParams =
+  | Partial<CantooWebData>
+  | ((current: CantooWebData) => Partial<CantooWebData>);
 
 /**
  * Options d'accessibilité.
@@ -315,7 +329,7 @@ interface Text2Speech {
 ```js
 /**
  * Insère un texte dicté dans un champ de saisie HTML.
- * 
+ *
  * @param spokenText - Le texte à insérer.
  * @param inputTarget - (optionnel) L'élément HTML cible. Si non défini, le focus actuel est utilisé.
  */
@@ -390,6 +404,93 @@ declare function deactivate(): void;
  * @param params - Les paramètres de configuration à charger.
  */
 declare function load(params: CantooWebData): void;
+```
+
+### 🔧 setConfig — Mettre à jour partiellement la configuration
+
+Contrairement à `load`, qui remplace le jeu de paramètres via l’événement `cantooLoadParameters`, **`setConfig`** applique une **mise à jour partielle** : seules les sections et champs fournis sont modifiés ; le reste de la configuration en cours est conservé. Pour chaque section (dictée, lecture, accessibilité, options du plugin), les nouvelles valeurs sont **fusionnées** avec les valeurs déjà stockées (fusion superficielle d’objet).
+
+`setConfig` accepte deux formes :
+
+- **Un objet** `Partial<CantooWebData>` — les sections fournies sont fusionnées directement.
+- **Une fonction** `(current: CantooWebData) => Partial<CantooWebData>` — reçoit la configuration courante et retourne les sections à modifier (comme un `setState` React).
+
+Le traitement prend effet lorsque l’extension a fini de charger ses paramètres initiaux ; techniquement, `setConfig` envoie un `CustomEvent` nommé `cantooSetConfig` sur `document`, avec le même détail que l’objet passé en argument.
+
+```js
+/**
+ * Met à jour partiellement la configuration Cantoo Web (merge par section).
+ *
+ * @param params - Objet partiel ou fonction recevant la config courante.
+ */
+declare function setConfig(params: SetConfigParams): void;
+```
+
+**Exemples :**
+
+```typescript
+// Uniquement la taille de police et la vitesse de lecture, sans toucher au reste
+window.Cantoo.setConfig({
+  "accessibility-options": { fontSize: 18 },
+  "vocal-reading": { rate: 1.1 },
+});
+```
+
+```typescript
+// Activer le mode sombre
+window.Cantoo.setConfig({
+  "accessibility-options": { contrastMode: "darkMode" },
+});
+```
+
+```typescript
+// Activer le mode haut contraste
+window.Cantoo.setConfig({
+  "accessibility-options": { contrastMode: "highContrast" },
+});
+```
+
+```typescript
+// Activer la loupe (magnifier)
+window.Cantoo.setConfig({
+  "accessibility-options": { magnifier: true, magnifierZoom: 2 },
+});
+```
+
+```typescript
+// Activer le bandeau de lecture
+window.Cantoo.setConfig({
+  "accessibility-options": { readBand: true, bandWidth: 80, bandOpacity: 0.5 },
+});
+```
+
+```typescript
+// Inverser les images (utile en combinaison avec le mode sombre)
+window.Cantoo.setConfig({
+  "accessibility-options": { contrastMode: "darkMode", invertImages: true },
+});
+```
+
+```typescript
+// Utiliser une fonction pour lire la config courante (comme un setState React)
+window.Cantoo.setConfig((current) => {
+  const rate = current["vocal-reading"]?.rate ?? 1;
+  return {
+    "vocal-reading": { rate: Math.min(rate + 0.1, 2) },
+  };
+});
+```
+
+```typescript
+// Toggle du mode sombre en fonction de l'état actuel
+window.Cantoo.setConfig((current) => ({
+  "accessibility-options": {
+    contrastMode:
+      current["accessibility-options"]?.contrastMode === "darkMode"
+        ? undefined
+        : "darkMode",
+  },
+}));
 ```
 
 ### 👂 addParameterChangeListener — Ajouter un écouteur de changement de paramètres
